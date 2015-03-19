@@ -19,8 +19,9 @@ clientPort=2181
 # specify all zookeeper servers
 # The fist port is used by followers to connect to the leader
 # The second one is used for leader election
-{{ range getvs "/services/zookeeper/*" }}
-server{{ . }}
+{{ range gets "/services/zookeeper/*" }}
+{{$server := json .Value}}
+server{{$server.id}}={{$server.address}}:{{$server.quorumport}}:{{$server.electionport}}
 {{end}}
 #server.1=zookeeper1:2888:3888
 #server.2=zookeeper2:2888:3888

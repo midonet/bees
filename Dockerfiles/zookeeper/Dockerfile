@@ -10,6 +10,10 @@ RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.8.0/confd
 RUN chmod +x ./confd-0.8.0-linux-amd64
 RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
 
+# This requires the latest version of the script to be copied into the build context directory
+ADD confd-watch /usr/local/bin/confd-watch
+RUN chmod +x /usr/local/bin/confd-watch
+
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
 VOLUME ["/var/lib/zookeeper", "/tmp/zookeeper"]
