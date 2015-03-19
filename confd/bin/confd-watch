@@ -10,13 +10,13 @@ export ETCD=$HOST_IP:4001
 echo "[zookeeper] booting container. ETCD: $ETCD"
 
 # Loop until confd has updated the zookeeper config
-until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/zookeeper.toml; do
-  echo "[zookeeper] waiting for confd to refresh zookeeper.conf"
+until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/zookeeper.toml && confd -onetime -node $ETCD -config-file /etcd/confd/conf.d/zookeeper-myid.toml; do
+  echo "[zookeeper] waiting for confd to refresh zookeeper.conf and myid"
   sleep 5
 done
 
 # Run confd in the background to watch the upstream servers
-confd -interval 10 -node $ETCD -config-file /etc/confd/conf.d/zookeeper.toml &
+confd -interval 10 -node $ETCD -config-file /etc/confd/conf.d/zookeeper.toml  && confd -interval 10 -node $ETCD -config-file /etcd/confd/conf.d/zookeeper-myid.toml &
 echo "[zookeeper] confd is listening for changes on etcd..."
 
 # Start zookeeper
