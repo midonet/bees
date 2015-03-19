@@ -1,0 +1,4 @@
+{{range gets `/${COREOS_PUBLIC_IPV4}`}}
+{{$ID := json .Value}}
+{{$ID.id}}
+{{end}}
