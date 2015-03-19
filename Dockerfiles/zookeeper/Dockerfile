@@ -7,6 +7,8 @@ RUN apt-get install -qqy zookeeper curl wget
 
 # Grab confd and set it up
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.8.0/confd-0.8.0-linux-amd64
+RUN chmod +x ./confd-0.8.0-linux-amd64
+RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
