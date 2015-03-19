@@ -1,5 +1,7 @@
 # Repo specific files
-/Dockerfiles/zookeeper/confd-watch
+Dockerfiles/zookeeper/confd-watch
+Dockerfiles/zookeeper/confd*
+Dockerfiles/zookeeper/confd*/*
 
 
 # Byte-compiled / optimized / DLL files

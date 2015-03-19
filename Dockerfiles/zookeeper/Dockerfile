@@ -14,6 +14,9 @@ RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
 ADD confd-watch /usr/local/bin/confd-watch
 RUN chmod +x /usr/local/bin/confd-watch
 
+# This requires the latest version of the confd directory structure to be copied into the build context
+COPY confd/ /etc/confd/
+
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
 VOLUME ["/var/lib/zookeeper", "/tmp/zookeeper"]
