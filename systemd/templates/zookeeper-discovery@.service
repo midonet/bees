@@ -17,17 +17,17 @@ EnvironmentFile=/etc/environment
 ## Test whether service is accessible and then register useful information
 ExecStart=/bin/bash -c '\
   while true; do \
-    curl -f ${COREOS_PRIVATE_IPV4}:%i; \
+    curl -f ${COREOS_PUBLIC_IPV4}:%i; \
     if [ $? -eq 0 ]; then \
-      etcdctl set /services/zookeeper/${COREOS_PRIVATE_IPV4} \'${COREOS_PRIVATE_IPV4}:2888:3888\' --ttl 30; \
+      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} \''{"id":"1", "address":'${COREOS_PUBLIC_IPV4}', "quorumport":"2888", "electionport":"3888"}'\' --ttl 30; \
     else \
-      etcdctl rm /services/zookeeper/${COREOS_PRIVATE_IPV4}; \
+      etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}; \
     fi; \
     sleep 20; \
   done'
 
 # Stop
-ExecStop=/usr/bin/etcdctl rm /services/zookeeper/${COREOS_PRIVATE_IPV4}
+ExecStop=/usr/bin/etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}
 
 [X-Fleet]
 MachineOf=zookeeper@%i.service
