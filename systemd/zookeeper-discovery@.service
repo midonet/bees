@@ -1,0 +1,33 @@
+[Unit]
+Description=Zookeeper service discovery
+
+Requires=etcd.service
+Requires=docker.service
+Requires=zookeeker@%i.service
+
+After=etcd.service
+After=docker.service
+Before=zookeeper@%i.service
+BindsTo=zookeeper@%i.service
+
+[Service]
+EnvironmentFile=/etc/environment
+
+# Start
+## Test whether service is accessible and then register useful information
+ExecStart=/bin/bash -c '\
+  while true; do \
+    curl -f ${COREOS_PRIVATE_IPV4}:%i; \
+    if [ $? -eq 0 ]; then \
+      etcdctl set /services/zookeeper/${COREOS_PRIVATE_IPV4} \'${COREOS_PRIVATE_IPV4}:%i\' --ttl 30; \
+    else \
+      etcdctl rm /services/zookeeper/${COREOS_PRIVATE_IPV4}; \
+    fi; \
+    sleep 20; \
+  done'
+
+# Stop
+ExecStop=/usr/bin/etcdctl rm /services/zookeeper/${COREOS_PRIVATE_IPV4}
+
+[X-Fleet]
+MachineOf=zookeeper@%i.service
