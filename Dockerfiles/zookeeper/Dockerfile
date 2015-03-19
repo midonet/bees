@@ -18,6 +18,6 @@ WORKDIR /var/lib/zookeeper
 
 EXPOSE 2181 2888 3888
 
-ENTRYPOINT ["/usr/share/zookeeper/bin/zkServer.sh"]
+ENTRYPOINT ["/usr/local/bin/confd-watch","/usr/share/zookeeper/bin/zkServer.sh"]
 
-CMD ["start-foreground"]	
+CMD ["start-foreground"]
