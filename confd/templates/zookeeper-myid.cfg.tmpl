@@ -1,4 +1,5 @@
-{{range gets `/${COREOS_PUBLIC_IPV4}`}}
+{{$HOST_IP := getenv '${COREOS_PUBLIC_IPV4}'
+{{range gets'/${HOST_IP}'}
 {{$ID := json .Value}}
 {{$ID.id}}
 {{end}}
