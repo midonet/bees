@@ -11,7 +11,7 @@ echo "[zookeeper] booting container. ETCD: $ETCD"
 
 # Loop until confd has updated the zookeeper config
 until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/zookeeper.toml; do
-  echo "[zookeeper] waiting for confd to refresh zookeeper.conf and myid"
+  echo "[zookeeper] waiting for confd to refresh zookeeper.conf"
   sleep 5
 done
 
