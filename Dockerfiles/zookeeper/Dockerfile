@@ -11,8 +11,10 @@ RUN chmod +x ./confd-0.8.0-linux-amd64
 RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
 
 # This requires the latest version of the script to be copied into the build context directory
-ADD confd-watch /usr/local/bin/confd-watch
-RUN chmod +x /usr/local/bin/confd-watch
+ADD confd-watch-zookeeper /usr/local/bin/confd-watch-zookeeper
+RUN chmod +x /usr/local/bin/confd-watch-zookeeper
+ADD confd-watch-myid /usr/local/bin/confd-watch-myid
+RUN chmod +x /usr/local/bin/confd-watch-myid
 
 # This requires the latest version of the confd directory structure to be copied into the build context
 COPY confd/ /etc/confd/
@@ -25,6 +27,6 @@ WORKDIR /var/lib/zookeeper
 
 EXPOSE 2181 2888 3888
 
-ENTRYPOINT ["/usr/local/bin/confd-watch","/usr/share/zookeeper/bin/zkServer.sh"]
+ENTRYPOINT ["/usr/local/bin/confd-watch-zookeeper","/usr/local/bin/confd-watch-myid","/usr/share/zookeeper/bin/zkServer.sh"]
 
 CMD ["start-foreground"]

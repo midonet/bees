@@ -1,5 +1,3 @@
-{{$HOST_IP := getenv 'HOST_IP'}}
-{{range gets'/${HOST_IP}'}
-{{$ID := json .Value}}
-{{$ID.id}}
-{{end}}
+{{gets "/*"}}
+{{$server := json .Value }}
+{{$server.id}}
