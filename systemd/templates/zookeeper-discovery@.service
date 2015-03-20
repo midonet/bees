@@ -19,7 +19,7 @@ ExecStart=/bin/bash -c '\
   while true; do \
     curl -f ${COREOS_PUBLIC_IPV4}:%i; \
     if [ $? -eq 0 ]; then \
-      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} \''{"id":"1", "address":'${COREOS_PUBLIC_IPV4}', "quorumport":"2888", "electionport":"3888"}'\' --ttl 30; \
+      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} '{"id":"1", "address":"'${COREOS_PUBLIC_IPV4}'"", "quorumport":"2888", "electionport":"3888"}' --ttl 30; \
     else \
       etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}; \
     fi; \
