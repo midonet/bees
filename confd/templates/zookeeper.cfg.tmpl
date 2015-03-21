@@ -21,7 +21,7 @@ clientPort=2181
 # The second one is used for leader election
 {{ range gets "/services/zookeeper/*" }}
 {{$server := json .Value}}
-server{{$server.id}}={{$server.address}}:{{$server.quorumport}}:{{$server.electionport}}
+server.{{$server.id}}={{$server.address}}:{{$server.quorumport}}:{{$server.electionport}}
 {{end}}
 #server.1=zookeeper1:2888:3888
 #server.2=zookeeper2:2888:3888
