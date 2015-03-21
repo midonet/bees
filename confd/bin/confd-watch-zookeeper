@@ -24,4 +24,4 @@ echo "[zookeeper] starting zookeeper service..."
 service zookeeper start
 
 # Tail all zookeeper log files
-tail -f /var/log/zookeeper/*.log
+#tail -f /var/log/zookeeper/*.log
