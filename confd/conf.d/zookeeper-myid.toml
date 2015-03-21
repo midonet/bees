@@ -9,7 +9,7 @@ dest = "/etc/zookeeper/conf/myid"
 
 # The etcd keys or directory to watch.  This is where the information to fill in
 # the template will come from.
-keys = [ '/services/zookeeper/$HOST_IP' ]
+keys = [ "/services/zookeeper/$HOST_IP" ]
 
 # File ownership and mode information
 owner = "root"
