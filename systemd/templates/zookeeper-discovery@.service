@@ -12,14 +12,15 @@ BindsTo=zookeeper@%i.service
 
 [Service]
 EnvironmentFile=/etc/environment
+EnvironmentFile=/var/tmp/zookeeper-env
 
 # Start
 ## Test whether service is accessible and then register useful information
 ExecStart=/bin/bash -c '\
   while true; do \
-    curl -f ${COREOS_PUBLIC_IPV4}:%i; \
-    if [ $? -eq 0 ]; then \
-      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} '{"id":"1", "address":"'${COREOS_PUBLIC_IPV4}'"", "quorumport":"2888", "electionport":"3888"}' --ttl 30; \
+    zooresponse=$(echo "ruok" | ncat ${COREOS_PUBLIC_IPV4} $ZOO_QUORUM"; \
+    if [ $zooresponse="imok" ]; then \
+      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} '{"id":"%i", "address":"'${COREOS_PUBLIC_IPV4}'"", "quorumport":"${ZOO_QUORUM}", "electionport":"${ZOO_ELECTION}"}' --ttl 30; \
     else \
       etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}; \
     fi; \

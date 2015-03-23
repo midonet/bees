@@ -2,16 +2,20 @@
 [Unit]
 Description=Zookeeper
 After=docker.service
+After=network.service
 Requires=docker.service
 
 [Service]
 Restart=on-failure
 RestartSec=20
 TimeoutStartSec=0
-ExecStartPre=-/usr/bin/docker kill zookeeper
-ExecStartPre=-/usr/bin/docker rm zookeeper
-ExecStartPre=/usr/bin/docker pull jplock/zookeeper
-ExecStart=/usr/bin/docker run --net=host --name=zookeeper jplock/zookeeper
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill zookeeper-node-%H
+ExecStartPre=-/usr/bin/docker rm zookeeper-node-%H
+ExecStartPre=/usr/bin/docker pull timfallmk/zookeeper
+# COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
+# Change branches from 'hacky-version-that-works' to 'master' when that works
+ExecStart=/usr/bin/docker run --name=zookeeper-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -P timfallmk/zookeeper:hacky
 ExecStop=/usr/bin/docker stop zookeeper
 
 [Install]
