@@ -3,7 +3,7 @@ MAINTAINER Tim <tim@midokura.com>
 
 # Install zookeeper and requirements from repos
 RUN apt-get update && apt-get install -qqy --no-install-recommends openjdk-7-jre-headless
-RUN apt-get install -qqy zookeeper curl wget vim
+RUN apt-get install -qqy zookeeper curl wget vim fish
 
 # Grab confd and set it up
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.8.0/confd-0.8.0-linux-amd64
