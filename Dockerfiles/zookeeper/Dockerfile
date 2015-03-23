@@ -16,6 +16,10 @@ RUN chmod +x /usr/local/bin/confd-watch-zookeeper
 ADD confd-watch-myid /usr/local/bin/confd-watch-myid
 RUN chmod +x /usr/local/bin/confd-watch-myid
 
+# Crappy script additions. THIS SHOULD BE REVERTED.
+ADD crappy-script.sh /usr/local/bin/crappy-script
+RUN chmod +x /usr/local/bin/crappy-script
+
 # This requires the latest version of the confd directory structure to be copied into the build context
 COPY confd/ /etc/confd/
 
