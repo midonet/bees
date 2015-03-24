@@ -12,7 +12,8 @@ TimeoutStartSec=0
 EnvironmentFile=/etc/environment
 ExecStartPre=-/usr/bin/docker kill zookeeper-node-%H
 ExecStartPre=-/usr/bin/docker rm zookeeper-node-%H
-ExecStartPre=/usr/bin/docker pull timfallmk/zookeeper
+# Change branches from 'hacky-version-that-works' to 'master' when that works
+ExecStartPre=/usr/bin/docker pull timfallmk/zookeeper:hacky
 # COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
 # Change branches from 'hacky-version-that-works' to 'master' when that works
 ExecStart=/usr/bin/docker run --name=zookeeper-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -P timfallmk/zookeeper:hacky
