@@ -16,7 +16,7 @@ EnvironmentFile=/etc/environment
 Environment=ZOO_QUORUM=2888
 Environment=ZOO_ELECTION=3888
 # I don't like this at all, but I systemd doesn't like it inline
-Environment=PASTE='{"id":"%i", "address":"${COREOS_PUBLIC_IPV4}", "quorumport":"${ZOO_QUORUM}", "electionport":"${ZOO_ELECTION}"}'
+Environement=PASTE='{"id":"%i", "address":"${COREOS_PUBLIC_IPV4}", "quorumport":"${ZOO_QUORUM}", "electionport":"${ZOO_ELECTION}"}'
 
 # Start
 ## Test whether service is accessible and then register useful information
