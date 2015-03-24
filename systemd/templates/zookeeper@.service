@@ -1,10 +1,11 @@
 # Borrowed from Mesosphere zookeeper service https://github.com/mesosphere/mesosphere-zookeeper
 [Unit]
 Description=Zookeeper
-After=docker.service
-After=network.service
 Requires=docker.service
 Requires=zookeeper-discovery@%i.service
+After=docker.service
+After=network.service
+After=zookeeper-discovery@%i.service
 
 [Service]
 Restart=on-failure
