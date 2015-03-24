@@ -12,24 +12,20 @@ BindsTo=zookeeper@%i.service
 
 [Service]
 EnvironmentFile=/etc/environment
-# We'll get these from etcd eventually
-Environment=ZOO_QUORUM=2888
-Environment=ZOO_ELECTION=3888
-# I don't like this at all, but I systemd doesn't like it inline
-Environement=PASTE='{"id":"%i", "address":"${COREOS_PUBLIC_IPV4}", "quorumport":"${ZOO_QUORUM}", "electionport":"${ZOO_ELECTION}"}'
+EnvironmentFile=/var/tmp/zookeeper-env
 
 # Start
 ## Test whether service is accessible and then register useful information
-ExecStart=/bin/bash -c '\
+ExecStart=/bin/bash -c "\
   zooresponse=$(echo "ruok" | ncat ${COREOS_PUBLIC_IPV4} 2181); \
   while true; do \
     if [ $zooresponse="imok" ]; then \
-      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} ${PASTE} --ttl 30; \
+      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} '{"id":"%i", "address":"${COREOS_PUBLIC_IPV4}", "quorumport":"${ZOO_QUORUM}", "electionport":"${ZOO_ELECTION}"}' --ttl 30; \
     else \
       etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}; \
     fi; \
     sleep 20; \
-  done'
+  done"
 
 # Stop
 ExecStop=/usr/bin/etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}
