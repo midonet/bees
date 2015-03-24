@@ -3,11 +3,11 @@ Description=Zookeeper service discovery
 
 Requires=etcd.service
 Requires=docker.service
-Requires=zookeeker@%i.service
+Requires=zookeeper@%i.service
 
 After=etcd.service
 After=docker.service
-Before=zookeeper@%i.service
+After=zookeeper@%i.service
 BindsTo=zookeeper@%i.service
 
 [Service]

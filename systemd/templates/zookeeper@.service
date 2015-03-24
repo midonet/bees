@@ -5,7 +5,7 @@ Requires=docker.service
 Requires=zookeeper-discovery@%i.service
 After=docker.service
 After=network.service
-After=zookeeper-discovery@%i.service
+Before=zookeeper-discovery@%i.service
 
 [Service]
 Restart=on-failure
