@@ -14,7 +14,7 @@ BindsTo=zookeeper@%i.service
 EnvironmentFile=/etc/environment
 # We'll get this from etcd eventually
 Environment=ZOO_QUORUM=2888
-Environment=ZOO_ELECTION=388
+Environment=ZOO_ELECTION=3888
 
 # Start
 ## Test whether service is accessible and then register useful information
