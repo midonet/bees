@@ -12,7 +12,9 @@ BindsTo=zookeeper@%i.service
 
 [Service]
 EnvironmentFile=/etc/environment
-EnvironmentFile=/var/tmp/zookeeper-env
+# We'll get this from etcd eventually
+Environment=ZOO_QUORUM=2888
+Environment=ZOO_ELECTION=388
 
 # Start
 ## Test whether service is accessible and then register useful information
