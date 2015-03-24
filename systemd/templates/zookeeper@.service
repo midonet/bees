@@ -23,3 +23,6 @@ ExecStop=/usr/bin/docker stop zookeeper
 
 [Install]
 WantedBy=multi-user.target
+
+[x-Fleet]
+Conflicts=zookeeper@*.service
