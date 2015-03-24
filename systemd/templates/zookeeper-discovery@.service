@@ -16,7 +16,7 @@ EnvironmentFile=/var/tmp/zookeeper-env
 
 # Start
 ## Test whether service is accessible and then register useful information
-ExecStart=/bin/bash -c "\
+ExecStart=/bin/bash -c '\
   zooresponse="$(echo "ruok" | ncat ${COREOS_PUBLIC_IPV4} 2181)"; \
   while true; do \
     if [ $zooresponse="imok" ]; then \
@@ -25,7 +25,7 @@ ExecStart=/bin/bash -c "\
       etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}; \
     fi; \
     sleep 20; \
-  done"
+  done'
 
 # Stop
 ExecStop=/usr/bin/etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}
