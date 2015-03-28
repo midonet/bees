@@ -198,7 +198,7 @@ saved_caches_directory: /var/lib/cassandra/saved_caches
 
 # The name of the cluster. This is mainly used to prevent machines in
 # one logical cluster from joining another.
-cluster_name: "{{ getv "/config/default/cassandra/cluster-name" }}"
+cluster_name: "{{ getv "/configuration/cassandra/cluster-name" }}"
 
 # This defines the number of tokens randomly assigned to this node on the ring
 # The more tokens, relative to other nodes, the larger the proportion of data
