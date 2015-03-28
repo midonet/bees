@@ -418,7 +418,7 @@ seed_provider:
           # Ex: "<ip1>,<ip2>,<ip3>"
           {{range gets "/*"}}
           {{$servers := json .Value}}
-          - seeds: "{{join $servers.address "," }}"
+          - seeds: "{{join $servers.address ","}}"
           {{end}}
 
 # For workloads with more data than can fit in memory, Cassandra's
