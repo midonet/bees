@@ -44,7 +44,7 @@ Boom. Done.
 ##### With `systemd`
 The easiest (and most automated) way to launch and manage the cluster is with `systemd`. We'll be doing it in CoreOS, which already has all the components we need. This assumes you already have a cluster up and running.
 
-The steps here are very simple. We have `sytemd` unit file templates which we will load into `fleet` and then just launch then. It's that easy. Let's do it.
+The steps here are very simple. We have `systemd` unit file templates which we will load into `fleet` and then just launch then. It's that easy. Let's do it.
 
 First clone the repo onto whatever node you'll be working on. Which node doesn't matter.
 
