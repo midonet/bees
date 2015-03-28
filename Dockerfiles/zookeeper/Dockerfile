@@ -25,7 +25,12 @@ RUN chmod +x /usr/local/bin/crappy-script
 # This requires the latest version of the confd directory structure to be copied into the build context
 COPY confd/ /etc/confd/
 
+# This removes unused config files, because they will be read
+RUN rm -f /etc/confd/conf.d/cassandra.toml && rm -f /etc/confd/templates/cassandra.cfg.tmpl
+RUN rm -f /etc/confd/conf.d/zookeeper-myid.toml && rm -f /etc/confd/templates/zookeeper-myid.cfg.tmpl
+
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
+ENV HOST_IP="localhost"
 
 VOLUME ["/var/lib/zookeeper", "/tmp/zookeeper"]
 
