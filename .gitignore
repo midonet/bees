@@ -2,6 +2,9 @@
 Dockerfiles/zookeeper/confd-watch
 Dockerfiles/zookeeper/confd*
 Dockerfiles/zookeeper/confd*/*
+Dockerfiles/*/confd/*
+Dockerfiles/*/confd*/*
+Dockerfiles/*/confd*
 
 
 # Byte-compiled / optimized / DLL files
