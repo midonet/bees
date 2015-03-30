@@ -30,6 +30,8 @@ RUN rm -f /etc/confd/conf.d/cassandra.toml && rm -f /etc/confd/templates/cassand
 RUN rm -f /etc/confd/conf.d/zookeeper-myid.toml && rm -f /etc/confd/templates/zookeeper-myid.cfg.tmpl
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
+
+# Add default HOST_IP to localhost
 ENV HOST_IP="localhost"
 
 VOLUME ["/var/lib/zookeeper", "/tmp/zookeeper"]

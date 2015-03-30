@@ -7,7 +7,7 @@
 
 # The name of the cluster. This is mainly used to prevent machines in
 # one logical cluster from joining another.
-cluster_name: 'Test Cluster'
+cluster_name: '{{ get getv "/configuration/cassandra/cluster-name"}}'
 
 # This defines the number of tokens randomly assigned to this node on the ring
 # The more tokens, relative to other nodes, the larger the proportion of data
@@ -198,7 +198,8 @@ saved_caches_directory: /var/lib/cassandra/saved_caches
 
 # The name of the cluster. This is mainly used to prevent machines in
 # one logical cluster from joining another.
-cluster_name: "{{ getv "/configuration/cassandra/cluster-name" }}"
+
+#cluster_name:
 
 # This defines the number of tokens randomly assigned to this node on the ring
 # The more tokens, relative to other nodes, the larger the proportion of data
@@ -416,10 +417,9 @@ seed_provider:
       parameters:
           # seeds is actually a comma-delimited list of addresses.
           # Ex: "<ip1>,<ip2>,<ip3>"
-          {{range (getvs "/*").Key}}
-          - seeds: "\
-          ,{{ . }}\
-          "
+          {{range gets "/*"}}
+          {{$servers := json .Value}}
+          - seeds: "{{join $servers.address ","}}"
           {{end}}
 
 # For workloads with more data than can fit in memory, Cassandra's
