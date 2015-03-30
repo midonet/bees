@@ -10,7 +10,7 @@ RUN chmod +x ./confd-0.8.0-linux-amd64
 RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
 
 # This requires the scripts to copied into the build context
-ADD confd/bin/confd-watch-cassandra /usr/local/bin
+ADD confd/bin/confd-watch-cassandra /usr/local/bin/confd-watch-cassandra
 RUN chmod +x /usr/local/bin/confd-watch-cassandra
 
 # This requires the latest version of the confd directory structure to be copied into the build context
@@ -22,7 +22,7 @@ RUN rm -f /etc/confd/conf.d/zookeeper-myid.toml && rm -f /etc/confd/templates/zo
 
 ENV CASSANDRA_CLUSTERNAME="midonet"
 # Add default HOST_IP to localhost
-ENV HOST_IP="localhost"
+#ENV HOST_IP="localhost"
 
 VOLUME ["/var/lib/cassandra"]
 

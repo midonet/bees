@@ -9,8 +9,8 @@ dest = "/etc/cassandra/cassandra.yaml"
 
 # The etcd keys or directory to watch.  This is where the information to fill in
 # the template will come from.
-prefix = "/services/cassandra"
-keys = [ "/" ]
+# prefix = "/services/cassandra"
+keys = [ "/services/cassandra" ]
 
 # File ownership and mode information
 owner = "root"
