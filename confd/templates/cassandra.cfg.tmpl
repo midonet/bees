@@ -490,7 +490,7 @@ listen_address:
 
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
-# broadcast_address: 1.2.3.4
+broadcast_address: {{ getenv "HOST_IP"}}
 
 # Internode authentication backend, implementing IInternodeAuthenticator;
 # used to allow/disallow connections from peer nodes.
@@ -524,7 +524,7 @@ start_rpc: true
 # Note that unlike ListenAddress above, it is allowed to specify 0.0.0.0
 # here if you want to listen on all interfaces, but that will break clients
 # that rely on node auto-discovery.
-rpc_address: {{ getenv "HOST_IP" }}
+rpc_address: 0.0.0.0
 # port for Thrift to listen for clients on
 rpc_port: 9160
 
