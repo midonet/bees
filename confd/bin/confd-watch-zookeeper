@@ -21,7 +21,7 @@ echo "[zookeeper] confd is listening for changes on etcd..."
 
 # Start zookeeper
 echo "[zookeeper] starting zookeeper service..."
-/usr/share/zookeeper/bin/zkServer.sh restart
+/usr/share/zookeeper/bin/crappy-start.sh restart
 
 # Tail all zookeeper log files
 tail -f /var/log/zookeeper/*.log

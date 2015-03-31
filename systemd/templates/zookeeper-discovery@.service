@@ -3,29 +3,31 @@ Description=Zookeeper service discovery
 
 Requires=etcd.service
 Requires=docker.service
-Requires=zookeeker@%i.service
+Requires=zookeeper@%i.service
 
 After=etcd.service
 After=docker.service
-Before=zookeeper@%i.service
+After=zookeeper@%i.service
 BindsTo=zookeeper@%i.service
 
 [Service]
 EnvironmentFile=/etc/environment
-EnvironmentFile=/var/tmp/zookeeper-env
+# We'll get this from etcd eventually
+Environment=ZOO_QUORUM=2888
+Environment=ZOO_ELECTION=3888
 
 # Start
 ## Test whether service is accessible and then register useful information
-ExecStart=/bin/bash -c "\
-  zooresponse=$(echo "ruok" | ncat ${COREOS_PUBLIC_IPV4} 2181); \
+ExecStart=/bin/bash -c ' \
   while true; do \
+    zooresponse="$(echo "ruok" | ncat localhost 2181)"; \
     if [ $zooresponse="imok" ]; then \
-      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} '{"id":"%i", "address":"${COREOS_PUBLIC_IPV4}", "quorumport":"${ZOO_QUORUM}", "electionport":"${ZOO_ELECTION}"}' --ttl 30; \
+      etcdctl set /services/zookeeper/${COREOS_PUBLIC_IPV4} \'{"id":"%i", "address":"${COREOS_PUBLIC_IPV4}", "quorumport":"${ZOO_QUORUM}", "electionport":"${ZOO_ELECTION}"}\' --ttl 30; \
     else \
       etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}; \
     fi; \
     sleep 20; \
-  done"
+  done'
 
 # Stop
 ExecStop=/usr/bin/etcdctl rm /services/zookeeper/${COREOS_PUBLIC_IPV4}

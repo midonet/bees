@@ -46,6 +46,10 @@ The easiest (and most automated) way to launch and manage the cluster is with `s
 
 The steps here are very simple. We have `systemd` unit file templates which we will load into `fleet` and then just launch then. It's that easy. Let's do it.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> hacky-version-that-works
 First clone the repo onto whatever node you'll be working on. Which node doesn't matter.
 
 ```shell

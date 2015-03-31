@@ -11,13 +11,15 @@ RUN chmod +x ./confd-0.8.0-linux-amd64
 RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
 
 # This requires the latest version of the script to be copied into the build context directory
-ADD confd-watch-zookeeper /usr/local/bin/confd-watch-zookeeper
+ADD confd/bin/confd-watch-zookeeper /usr/local/bin/confd-watch-zookeeper
 RUN chmod +x /usr/local/bin/confd-watch-zookeeper
-ADD confd-watch-myid /usr/local/bin/confd-watch-myid
-RUN chmod +x /usr/local/bin/confd-watch-myid
+#ADD confd-watch-myid /usr/local/bin/confd-watch-myid
+#RUN chmod +x /usr/local/bin/confd-watch-myid
+ADD confd/bin/crappy-start.sh /usr/share/zookeeper/bin/crappy-start.sh
+RUN chmod +x /usr/share/zookeeper/bin/crappy-start.sh
 
 # Crappy script additions. THIS SHOULD BE REVERTED.
-ADD crappy-script.sh /usr/local/bin/crappy-script
+ADD confd/bin/crappy-script.sh /usr/local/bin/crappy-script
 RUN chmod +x /usr/local/bin/crappy-script
 
 # This requires the latest version of the confd directory structure to be copied into the build context
@@ -31,12 +33,15 @@ ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 # Add default HOST_IP to localhost
 ENV HOST_IP="localhost"
 
+# Add default HOST_IP to localhost
+ENV HOST_IP="localhost"
+
 VOLUME ["/var/lib/zookeeper", "/tmp/zookeeper"]
 
 WORKDIR /var/lib/zookeeper
 
 EXPOSE 2181 2888 3888
 
-ENTRYPOINT ["/usr/local/bin/confd-watch-zookeeper","/usr/local/bin/confd-watch-myid","/usr/share/zookeeper/bin/zkServer.sh"]
+ENTRYPOINT ["/usr/local/bin/confd-watch-zookeeper"]
 
-CMD ["start-foreground"]
+#CMD ["start-foreground"]
