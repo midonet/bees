@@ -29,4 +29,6 @@ VOLUME ["/var/lib/cassandra"]
 
 WORKDIR /var/lib/cassandra
 
+EXPOSE 7000 7001 7199 8012 9042 9160 61621
+
 ENTRYPOINT ["confd-watch-cassandra"]
