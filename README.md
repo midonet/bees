@@ -26,7 +26,7 @@ This is designed to run a single zookeeper container with some variables overrid
 
 `timfallmk/zookeeper:hacky` This is the docker image and the repository to pull it from. The `hacky` tag here pulls a version with has the hacky `myid` workarounds mentioned above.
 
-The container should now go through some initial setup and will running everything necessary. Since we *aren't* using `fleet` to launch units here, we might need to initially set some keys in `etcd` for the first run configuration.
+The container should now go through some initial setup and will run everything necessary. Since we *aren't* using `fleet` to launch units here, we might need to initially set some keys in `etcd` for the first run configuration.
 
 To do this, we can use `etcdctl` to set a key in the following place, with a `JSON` payload.
 
@@ -34,7 +34,7 @@ To do this, we can use `etcdctl` to set a key in the following place, with a `JS
 etcdctl set /service/zookeeper/<what we used for the ip earlier> '{"id":"1","address":"<same ip>","quorumport":"2888","electionport":"3888"}'
 ```
 
-This should set the key for the initial run so things can be substituted properly.
+This should set the key for the initial run so things can be substituted properly. *Note* that you can also use `curl` to interact with `etcd` if you don't have `etcdctl` installed.
 
 
 **Congratulations** you're now up and running with one node. You'll notice from the output that the `zoo.cfg` and `myid` files have been configured and the cluster is up and running. If you repeat the steps above with a second container (making sure to change the id and ip accordingly), you can watch as the new key in `etcd` is detected by `confd`, and it automatically updates all the necessary configs, restarting `zookeeper` afterwards.
@@ -46,10 +46,6 @@ The easiest (and most automated) way to launch and manage the cluster is with `s
 
 The steps here are very simple. We have `systemd` unit file templates which we will load into `fleet` and then just launch then. It's that easy. Let's do it.
 
-<<<<<<< HEAD
-=======
-
->>>>>>> hacky-version-that-works
 First clone the repo onto whatever node you'll be working on. Which node doesn't matter.
 
 ```shell
