@@ -415,7 +415,7 @@ seed_provider:
       parameters:
           # seeds is actually a comma-delimited list of addresses.
           # Ex: "<ip1>,<ip2>,<ip3>"
-          - seeds: {{range $index,$servers := gets "/services/cassandra/*"}}{{if $index}},"{{( json .Value).address}}"{{else}}"{{( json .Value).address}}"{{end}}{{end}}
+          - seeds: "{{range $index,$servers := gets "/services/cassandra/*"}}{{if $index}},{{( json .Value).address}}{{else}}{{( json .Value).address}}{{end}}{{end}}"
 
 # For workloads with more data than can fit in memory, Cassandra's
 # bottleneck will be reads that need to fetch data from

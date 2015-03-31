@@ -28,4 +28,4 @@ VOLUME ["/var/lib/cassandra"]
 
 WORKDIR /var/lib/cassandra
 
-ENTRYPOINT ["cassandra-clusternode","confd-watch-cassandra"]
+ENTRYPOINT ["confd-watch-cassandra"]
