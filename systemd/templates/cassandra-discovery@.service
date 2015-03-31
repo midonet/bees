@@ -1,0 +1,33 @@
+[Unit]
+Description=Cassandra service discovery
+
+Requires=etcd.service
+Requires=docker.service
+Requires=cassandra@%i.service
+
+After=etcd.service
+After=docker.service
+After=cassandra@%i.service
+BindsTo=cassandra@%i.service
+
+[Service]
+EnvironmentFile=/etc/environment
+
+# Start
+## Test whether service is accessible and then register useful information
+ExecStart=/bin/bash -c ' \
+  while true; do \
+    ncat localhost 9160; \
+    if [ $? -e 0 ]; then \
+      etcdctl set /services/cassandra/${COREOS_PUBLIC_IPV4} \'{"address":"${COREOS_PUBLIC_IPV4}"}\' --ttl 30; \
+    else \
+      etcdctl rm /services/cassandra/${COREOS_PUBLIC_IPV4}; \
+    fi; \
+    sleep 20; \
+  done'
+
+# Stop
+ExecStop=/usr/bin/etcdctl rm /services/cassandra/${COREOS_PUBLIC_IPV4}
+
+[X-Fleet]
+MachineOf=cassandra@%i.service

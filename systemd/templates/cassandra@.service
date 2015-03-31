@@ -1,0 +1,28 @@
+# Borrowed from Mesosphere zookeeper service https://github.com/mesosphere/mesosphere-zookeeper
+[Unit]
+Description=Zookeeper
+Requires=docker.service
+Requires=zookeeper-discovery@%i.service
+After=docker.service
+After=network.service
+Before=zookeeper-discovery@%i.service
+
+[Service]
+Restart=on-failure
+RestartSec=20
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill zookeeper-node-%H
+ExecStartPre=-/usr/bin/docker rm zookeeper-node-%H
+# Change branches from 'hacky-version-that-works' to 'master' when that works
+ExecStartPre=/usr/bin/docker pull timfallmk/zookeeper:hacky
+# COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
+# Change branches from 'hacky-version-that-works' to 'master' when that works
+ExecStart=/usr/bin/docker run --name=zookeeper-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 2181:2181 -p 2888:2888 -p 3888:3888 timfallmk/zookeeper:hacky
+ExecStop=/usr/bin/docker stop zookeeper
+
+[Install]
+WantedBy=multi-user.target
+
+[X-Fleet]
+Conflicts=zookeeper@*.service
