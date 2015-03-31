@@ -27,7 +27,8 @@ COPY confd/ /etc/confd/
 
 # This removes unused config files, because they will be read
 RUN rm -f /etc/confd/conf.d/cassandra.toml && rm -f /etc/confd/templates/cassandra.cfg.tmpl
-RUN rm -f /etc/confd/conf.d/zookeeper-myid.toml && rm -f /etc/confd/templates/zookeeper-myid.cfg.tmpl
+# This is no longer needed for now
+# RUN rm -f /etc/confd/conf.d/zookeeper-myid.toml && rm -f /etc/confd/templates/zookeeper-myid.cfg.tmpl
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 # Add default HOST_IP to localhost
