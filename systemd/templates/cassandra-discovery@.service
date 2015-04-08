@@ -18,7 +18,7 @@ EnvironmentFile=/etc/environment
 ExecStart=/bin/bash -c ' \
   while true; do \
     ncat -w 1 -c "exit" localhost 9160; \
-    if [ $? -e 0 ]; then \
+    if [ $? -eq 0 ]; then \
       etcdctl set /services/cassandra/${COREOS_PUBLIC_IPV4} \'{"address":"${COREOS_PUBLIC_IPV4}"}\' --ttl 30; \
     else \
       etcdctl rm /services/cassandra/${COREOS_PUBLIC_IPV4}; \
