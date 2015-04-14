@@ -3,6 +3,7 @@ FROM tomcat:8
 MAINTAINER "Tim <tim@midokura.com>"
 
 # Set the current version of the docs to get the apt source file we want
+RUN apt-get update && apt-get install -y wget
 RUN wget --https-only https://raw.githubusercontent.com/midonet/midonet-docs/master/docs/quick-start-guide/src/ubuntu-1404/juno/basic_environment/listitem_repo_config_midonet_en.adoc -O /tmp/midonet-apt-sources.adoc
 RUN sed -n '/----/,/----/p' /tmp/midonet-apt-sources.adoc | awk -F '----' '{print $1}' > /etc/apt/sources.list.d/midonet.list
 RUN curl -L http://repo.midonet.org/packages.midokura.key | apt-key add -
