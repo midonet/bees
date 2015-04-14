@@ -15,8 +15,8 @@ RUN chmod +x ./confd-0.9.0-linux-amd64
 RUN mv ./confd-0.9.0-linux-amd64 /usr/local/bin/confd
 
 # This requires the scripts to copied into the build context
-ADD confd/bin/confd-watch-tomcat /usr/local/bin/confd-watch-tomcat
-RUN chmod +x /usr/local/bin/confd-watch-tomcat
+ADD confd/bin/confd-watch-midonet-api /usr/local/bin/confd-watch-midonet-api
+RUN chmod +x /usr/local/bin/confd-watch-midonet-api
 
 # This requires the latest version of the confd directory structure to be copied into the build context
 COPY confd/ /etc/confd/
@@ -30,4 +30,4 @@ ADD https://raw.githubusercontent.com/midonet/midonet/master/midonet-api/conf/mi
 
 EXPOSE 8080
 
-ENTRYPOINT ["confd-watch-tomcat"]
+ENTRYPOINT ["confd-watch-midonet-api"]

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Fail hard and fast
+set -eo pipefail
+
+export ETCD_PORT=${ETCD_PORT:-4001}
+export HOST_IP=${HOST_IP:-172.17.42.1}
+export ETCD=$HOST_IP:4001
+
+echo "[midonet-api] booting container. ETCD: $ETCD"
+
+# Loop until confd has updated the midonet-api config
+until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/midonet-api.toml; do
+  echo "[midonet-api] waiting for confd to refresh midonet-api.conf"
+  sleep 5
+done
+
+# Run confd in the background to watch the upstream servers
+confd -interval 10 -node $ETCD -config-file /etc/confd/conf.d/midonet-api.toml &
+echo "[midonet-api] confd is listening for changes on etcd..."
+
+# Start midonet-api
+echo "[midonet-api] starting midonet-api service..."
+/usr/local/tomcat/bin/cassandra.sh stop && /usr/local/bin/tomcat/bin/cassandra.sh start
+
+# Tail all midonet-api log files
+tail -f /usr/local/tomcat/logs/catalina.out
