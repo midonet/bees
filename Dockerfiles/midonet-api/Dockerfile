@@ -23,11 +23,11 @@ RUN chmod +x /usr/local/bin/confd-watch-tomcat
 COPY confd/ /etc/confd/
 
 # This removes unused config files, because they will be read
-RUN shopt -s extglob
+RUN /bin/bash shopt -s extglob
 RUN rm -f /etc/confd/conf.d/!(midonet-api.toml) && rm -f /etc/confd/templates/!(midonet-api.cfg.tmpl)
 RUN shopt -u extglob
 
-COPY https://raw.githubusercontent.com/midonet/midonet/master/midonet-api/conf/midonet-api.xml /usr/local/tomcat/conf/Catalina/localhost/midonet-api.xml
+ADD https://raw.githubusercontent.com/midonet/midonet/master/midonet-api/conf/midonet-api.xml /usr/local/tomcat/conf/Catalina/localhost/midonet-api.xml
 
 EXPOSE 8080
 
