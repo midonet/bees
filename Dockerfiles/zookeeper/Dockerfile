@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -qqy --no-install-recommends openjdk-7-jre
 RUN apt-get install -qqy zookeeper curl wget vim fish
 
 # Grab confd and set it up
-RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.8.0/confd-0.8.0-linux-amd64
+RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64
 RUN chmod +x ./confd-0.8.0-linux-amd64
 RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
 
