@@ -7,8 +7,8 @@ RUN apt-get install -qqy zookeeper curl wget vim fish
 
 # Grab confd and set it up
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64
-RUN chmod +x ./confd-0.8.0-linux-amd64
-RUN mv ./confd-0.8.0-linux-amd64 /usr/local/bin/confd
+RUN chmod +x ./confd-0.9.0-linux-amd64
+RUN mv ./confd-0.9.0-linux-amd64 /usr/local/bin/confd
 
 # This requires the latest version of the script to be copied into the build context directory
 ADD confd/bin/confd-watch-zookeeper /usr/local/bin/confd-watch-zookeeper
