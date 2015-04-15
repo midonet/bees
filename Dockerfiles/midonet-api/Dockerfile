@@ -22,9 +22,8 @@ RUN chmod +x /usr/local/bin/confd-watch-midonet-api
 COPY confd/ /etc/confd/
 
 # This removes unused config files, because they will be read
-RUN /bin/bash shopt -s extglob
-RUN rm -f /etc/confd/conf.d/!(midonet-api.toml) && rm -f /etc/confd/templates/!(midonet-api.cfg.tmpl)
-RUN shopt -u extglob
+RUN rm -f /etc/confd/conf.d/cassandra.toml && rm -f /etc/confd/templates/cassandra.yaml.tmpl
+RUN rm -f /etc/confd/conf.d/zookeeper.toml && rm -f /etc/confd/templates/zookeeper.cfg.tmpl
 
 ADD https://raw.githubusercontent.com/midonet/midonet/master/midonet-api/conf/midonet-api.xml /usr/local/tomcat/conf/Catalina/localhost/midonet-api.xml
 
