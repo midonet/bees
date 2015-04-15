@@ -19,7 +19,7 @@ ExecStart=/bin/bash -c ' \
   while true; do \
     ncat -w 1 -c "exit" localhost 8080; \
     if [ $? -eq 0 ]; then \
-      etcdctl set /services/midonet-api/${COREOS_PUBLIC_IPV4} \'{"address":"${COREOS_PUBLIC_IPV4}"}\' --ttl 30; \
+      etcdctl set /services/midonet-api/${COREOS_PUBLIC_IPV4} \'{"address":"${COREOS_PUBLIC_IPV4}", "port":"8080", "vhost":"/midonet-api"}\' --ttl 30; \
     else \
       etcdctl rm /services/midonet-api/${COREOS_PUBLIC_IPV4}; \
     fi; \
