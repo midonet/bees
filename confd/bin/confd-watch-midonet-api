@@ -21,7 +21,7 @@ echo "[midonet-api] confd is listening for changes on etcd..."
 
 # Start midonet-api
 echo "[midonet-api] starting midonet-api service..."
-/usr/local/tomcat/bin/catalina.sh stop && /usr/local/bin/tomcat/bin/catalina.sh start
+/usr/local/tomcat/bin/catalina.sh stop && /usr/local/tomcat/bin/catalina.sh start
 
 # Tail all midonet-api log files
 tail -f /usr/local/tomcat/logs/catalina.out
