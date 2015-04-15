@@ -27,7 +27,7 @@
        to access the API is different from the actual server base URI. -->
   <context-param>
     <param-name>rest_api-base_uri</param-name>
-    <param-value>http://localhost:8080/midonet-api</param-value>
+    <param-value>http://{{ getenv "HOST_IP" }}:{{ getv "/configuration/midonet-api/port" }}/midonet-api</param-value>
   </context-param>
 
   <!-- CORS configuration -->
@@ -58,7 +58,7 @@
   </context-param>
   <context-param>
     <param-name>auth-admin_role</param-name>
-    <param-value>admin</param-value>
+    <param-value>{{ getv "/configuration/openstack/keystone/users/admin" }}</param-value>
   </context-param>
 
   <!-- Mock auth configuration -->
@@ -82,7 +82,7 @@
   </context-param>
   <context-param>
     <param-name>keystone-service_host</param-name>
-    <param-value>127.0.0.1</param-value>
+    <param-value>{{ getv "/configuration/openstack/keystone/host" }}</param-value>
   </context-param>
   <context-param>
     <param-name>keystone-service_port</param-name>
@@ -90,7 +90,7 @@
   </context-param>
   <context-param>
     <param-name>keystone-admin_token</param-name>
-    <param-value>999888777666</param-value>
+    <param-value>{{ getv "/configuration/openstack/keystone/admin-token" }}</param-value>
   </context-param>
   <!-- This tenant name is used to get the scoped token from Keystone, and
        should be the tenant name of the user that owns the token sent in the
