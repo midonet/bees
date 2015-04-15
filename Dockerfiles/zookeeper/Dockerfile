@@ -10,25 +10,19 @@ RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd
 RUN chmod +x ./confd-0.9.0-linux-amd64
 RUN mv ./confd-0.9.0-linux-amd64 /usr/local/bin/confd
 
-# This requires the latest version of the script to be copied into the build context directory
-ADD confd/bin/confd-watch-zookeeper /usr/local/bin/confd-watch-zookeeper
+ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/confd-watch-zookeeper /usr/local/bin/confd-watch-zookeeper
 RUN chmod +x /usr/local/bin/confd-watch-zookeeper
 #ADD confd-watch-myid /usr/local/bin/confd-watch-myid
 #RUN chmod +x /usr/local/bin/confd-watch-myid
-ADD confd/bin/crappy-start.sh /usr/share/zookeeper/bin/crappy-start.sh
+ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/crappy-start.sh /usr/share/zookeeper/bin/crappy-start.sh
 RUN chmod +x /usr/share/zookeeper/bin/crappy-start.sh
 
 # Crappy script additions. THIS SHOULD BE REVERTED.
-ADD confd/bin/crappy-script.sh /usr/local/bin/crappy-script
+ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/crappy-script.sh /usr/local/bin/crappy-script
 RUN chmod +x /usr/local/bin/crappy-script
 
-# This requires the latest version of the confd directory structure to be copied into the build context
-COPY confd/ /etc/confd/
-
-# This removes unused config files, because they will be read
-RUN rm -f /etc/confd/conf.d/cassandra.toml && rm -f /etc/confd/templates/cassandra.yaml.tmpl
-# This is no longer needed for now
-# RUN rm -f /etc/confd/conf.d/zookeeper-myid.toml && rm -f /etc/confd/templates/zookeeper-myid.cfg.tmpl
+ADD https://raw.githubusercontent.com/midonet/bees/master/confd/conf.d/zookeeper.toml /etc/confd/conf.d/zookeeper.toml
+ADD https://raw.githubusercontent.com/midonet/bees/master/confd/templates/zookeeper.cfg.tmpl /etc/confd/templates/zookeeper.cfg.tmpl
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 # Add default HOST_IP to localhost
