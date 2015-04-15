@@ -1,0 +1,25 @@
+[Unit]
+Description=Midonet-API
+Requires=docker.service
+Requires=midonet-api-discovery@%i.service
+After=docker.service
+After=network.service
+Before=midonet-api-discovery@%i.service
+
+[Service]
+Restart=on-failure
+RestartSec=20
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill midonet-api-node-%H
+ExecStartPre=-/usr/bin/docker rm midonet-api-node-%H
+ExecStartPre=/usr/bin/docker pull timfallmk/midonet-api
+# COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
+ExecStart=/usr/bin/docker run --name=midonet-api-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 8080:8080 timfallmk/midonet-api
+ExecStop=/usr/bin/docker stop midonet-api
+
+[Install]
+WantedBy=multi-user.target
+
+[X-Fleet]
+Conflicts=midonet-api@*.service
