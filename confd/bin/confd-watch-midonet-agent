@@ -21,7 +21,7 @@ echo "[midonet-agent] confd is listening for changes on etcd..."
 
 # Start midonet-agent
 echo "[midonet-agent] starting midonet-agent service..."
-/usr/local/tomcat/bin/catalina.sh stop && /usr/local/tomcat/bin/catalina.sh start
+/usr/sbin/service midolman restart
 
 # Tail the midonet-agent log files
 tail -f /var/log/midolman/midolman.log
