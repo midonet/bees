@@ -4,7 +4,7 @@ MAINTAINER "Tim <tim@midokura.com>"
 RUN apt-get update && apt-get install -y wget fish curl
 
 # Set the current version of the docs to get the apt source file we want
-ADD https://raw.githubusercontent.com/midonet/midonet-docs/build-refactor/docs/quick-start-guide/src/ubuntu-1404/juno/basic_environment/listitem_repo_config_midonet_en.adoc /tmp/midonet-apt-sources.adoc
+ADD https://raw.githubusercontent.com/midonet/midonet-docs/master/docs/quick-start-guide/src/ubuntu-1404/juno/basic_environment/listitem_repo_config_midonet_en.adoc /tmp/midonet-apt-sources.adoc
 RUN sed -n '/----/,/----/p' /tmp/midonet-apt-sources.adoc | awk -F '----' '{print $1}' > /etc/apt/sources.list.d/midonet.list
 RUN curl -L http://repo.midonet.org/packages.midokura.key | apt-key add -
 
