@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Fail hard and fast
+set -eo pipefail
+
+export ETCD_PORT=${ETCD_PORT:-4001}
+export HOST_IP=${HOST_IP:-172.17.42.1}
+export ETCD=$HOST_IP:4001
+
+echo "[midonet-agent] booting container. ETCD: $ETCD"
+
+# Loop until confd has updated the midonet-agent config
+until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/midonet-agent.toml; do
+  echo "[midonet-agent] waiting for confd to refresh midonet-agent.conf"
+  sleep 5
+done
+
+# Run confd in the background to watch the upstream servers
+confd -interval 10 -node $ETCD -config-file /etc/confd/conf.d/midonet-agent.toml &
+echo "[midonet-agent] confd is listening for changes on etcd..."
+
+# Start midonet-agent
+echo "[midonet-agent] starting midonet-agent service..."
+/usr/local/tomcat/bin/catalina.sh stop && /usr/local/tomcat/bin/catalina.sh start
+
+# Tail the midonet-agent log files
+tail -f /var/log/midolman/midolman.log
