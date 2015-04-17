@@ -19,6 +19,6 @@ RUN chmod +x /usr/local/bin/confd-watch-midonet-agent
 ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/conf.d/midonet-agent.toml /etc/confd/conf.d/midonet-agent.toml
 ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/templates/midonet-agent.conf.tmpl /etc/confd/templates/midonet-agent.conf.tmpl
 
-RUN apt-get update && apt-get install -y midolman
+RUN apt-get update && apt-get install -y midolman python
 
 ENTRYPOINT ['confd-watch-midonet-agent']
