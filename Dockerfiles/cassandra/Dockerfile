@@ -2,7 +2,7 @@ FROM timfallmk/cassandra:cluster
 MAINTAINER "Tim <tim@midokura.com>"
 # This is forked from spotify/cassandra:cluster to readd virtual nodes and gossip
 
-RUN apt-get update && apt-get install -y wget fish
+RUN apt-get update && apt-get install -y wget fish vim
 
 # Grab confd and set it up
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64

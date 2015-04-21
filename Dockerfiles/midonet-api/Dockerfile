@@ -7,7 +7,7 @@ ADD https://raw.githubusercontent.com/midonet/midonet-docs/master/docs/quick-sta
 RUN sed -n '/----/,/----/p' /tmp/midonet-apt-sources.adoc | awk -F '----' '{print $1}' > /etc/apt/sources.list.d/midonet.list
 RUN curl -L http://repo.midonet.org/packages.midokura.key | apt-key add -
 
-RUN apt-get update && apt-get install -y wget midonet-api
+RUN apt-get update && apt-get install -y wget midonet-api vim
 
 # Grab confd and set it up
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64
