@@ -16,6 +16,10 @@ RUN mv ./confd-0.9.0-linux-amd64 /usr/local/bin/confd
 ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/bin/confd-watch-midonet-agent /usr/local/bin/confd-watch-midonet-agent
 RUN chmod +x /usr/local/bin/confd-watch-midonet-agent
 
+# Add restart command for midonet-agent
+ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/bin/midonet-agent-restart.sh /usr/local/bin/midonet-agent-restart.sh
+RUN chmod +x /usr/local/bin/midonet-agent-restart.sh
+
 ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/conf.d/midonet-agent.toml /etc/confd/conf.d/midonet-agent.toml
 ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/templates/midonet-agent.conf.tmpl /etc/confd/templates/midonet-agent.conf.tmpl
 
