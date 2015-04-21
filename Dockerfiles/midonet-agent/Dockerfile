@@ -21,4 +21,4 @@ ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/template
 
 RUN apt-get update && apt-get install -y midolman python
 
-ENTRYPOINT ['confd-watch-midonet-agent']
+ENTRYPOINT ["confd-watch-midonet-agent"]
