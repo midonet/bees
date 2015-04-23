@@ -11,6 +11,7 @@ if [ -f $PIDFILE ]; then
   rm -f $WDPIDFILE
   echo "[midonet-agent-monitor] Killed process $PID, starting new process"
   (/usr/share/midolman/midolman-start &)
+  sleep 2
   PID=$(pidof java)
   WDPID=$(pidof wdog)
   echo $PID > $PIDFILE
