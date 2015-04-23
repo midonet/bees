@@ -2,8 +2,8 @@
 PIDFILE=/var/tmp/midonet-agent-pid.lock
 WDPIDFILE=/var/tmp/midonet-agent-wd-pid.lock
 if [ -f $PIDFILE ]; then
-	echo "[midonet-agent-monitor] Lockfile found at $PIDFILE, killing process"
-	PID=$(cat $PIDFILE)
+  echo "[midonet-agent-monitor] Lockfile found at $PIDFILE, killing process"
+  PID=$(cat $PIDFILE)
   WDPID=$(cat $PIDFILE)
   kill $PID
   kill $WDPID
@@ -19,6 +19,7 @@ if [ -f $PIDFILE ]; then
 else
   echo "[midonet-agent-monitor] No lockfile found, starting new process"
   (/usr/share/midolman/midolman-prepare && /usr/share/midolman/midolman-start &)
+  sleep 2
   PID=$(pidof java)
   WDPID=$(pidof wdog)
   echo $PID > $PIDFILE
