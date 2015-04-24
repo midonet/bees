@@ -9,9 +9,6 @@ export ETCD=$HOST_IP:4001
 
 echo "[midonet-agent] booting container. ETCD: $ETCD"
 
-# We need this for now, as the initial boot seems to fail
-(/usr/local/bin/midonet-agent-restart.sh &)
-
 # Loop until confd has updated the midonet-agent config
 until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/midonet-agent.toml; do
   echo "[midonet-agent] waiting for confd to refresh midonet-agent.conf"
