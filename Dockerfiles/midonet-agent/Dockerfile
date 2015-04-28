@@ -26,8 +26,10 @@ ADD https://raw.githubusercontent.com/midonet/bees/build-refactor/confd/template
 RUN apt-get update && apt-get install -y midolman python
 
 # Changes for phusion
-RUN cp --parents /usr/local/bin/confd-watch-midonet-agent /etc/service/confd-watch-midonet-agent/run
-RUN cp --parents /usr/share/midolman/midolman-start /etc/service/midolman/run
+RUN mkdir --parents /etc/service/confd-watch-midonet-agent
+RUN mkdir --parents /etc/service/midolman
+RUN ln -s /usr/local/bin/confd-watch-midonet-agent /etc/service/confd-watch-midonet-agent/run
+RUN ln -s /usr/share/midolman/midolman-start /etc/service/midolman/run
 
 
 ENTRYPOINT ["/sbin/my_init"]
