@@ -19,7 +19,7 @@ ExecStart=/bin/bash -c ' \
   while true; do \
     ncat -w 1 -c "exit" localhost 9160; \
     if [ $? -eq 0 ]; then \
-      etcdctl set /services/cassandra/${COREOS_PUBLIC_IPV4} \'{"address":"${COREOS_PUBLIC_IPV4}"}\' --ttl 30; \
+      etcdctl set /services/cassandra/${COREOS_PUBLIC_IPV4} \'{"address":"${COREOS_PUBLIC_IPV4}", "commport":"7000", "tlscommport":"7001", "jmxport":"7199", "thriftport":"9160", "cqlport":"9042"}\' --ttl 30; \
     else \
       etcdctl rm /services/cassandra/${COREOS_PUBLIC_IPV4}; \
     fi; \
