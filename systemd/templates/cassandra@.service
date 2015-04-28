@@ -13,9 +13,9 @@ TimeoutStartSec=0
 EnvironmentFile=/etc/environment
 ExecStartPre=-/usr/bin/docker kill cassandra-node-%H
 ExecStartPre=-/usr/bin/docker rm cassandra-node-%H
-ExecStartPre=/usr/bin/docker pull timfallmk/cassandra
+ExecStartPre=/usr/bin/docker pull timfallmk/bees:cassandra
 # COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
-ExecStart=/usr/bin/docker run --name=cassandra-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 7000:7000 -p 7199:7199 -p 8012:8012 -p 9042:9042 -p 9160:9160 -p 61621:61621 timfallmk/cassandra
+ExecStart=/usr/bin/docker run --name=cassandra-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 7000:7000 -p 7199:7199 -p 8012:8012 -p 9042:9042 -p 9160:9160 -p 61621:61621 timfallmk/bees:cassandra
 ExecStop=/usr/bin/docker stop cassandra
 
 [Install]
