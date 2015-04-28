@@ -16,7 +16,7 @@ ExecStartPre=-/usr/bin/docker rm midonet-api-node-%H
 ExecStartPre=/usr/bin/docker pull timfallmk/bees:midonet-api
 # COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
 ExecStart=/usr/bin/docker run --name=midonet-api-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 8080:8080 timfallmk/bees:midonet-api
-ExecStop=/usr/bin/docker stop midonet-api
+ExecStop=/usr/bin/docker stop midonet-api-node-%H
 
 [Install]
 WantedBy=multi-user.target
