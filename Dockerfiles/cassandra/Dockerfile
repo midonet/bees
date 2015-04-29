@@ -12,6 +12,9 @@ RUN mv ./confd-0.9.0-linux-amd64 /usr/local/bin/confd
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/confd-watch-cassandra /usr/local/bin/confd-watch-cassandra
 RUN chmod +x /usr/local/bin/confd-watch-cassandra
 
+ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/cassandra-restart /usr/local/bin/cassandra-restart
+RUN chmod +x /usr/local/bin/cassandra-restart
+
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/conf.d/cassandra.toml /etc/confd/conf.d/cassandra.toml
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/templates/cassandra.yaml.tmpl /etc/confd/templates/cassandra.yaml.tmpl
 

@@ -1,0 +1,5 @@
+#!/bin/bash
+kill $(cat /var/tmp/cassandra-pid.lock)
+sleep 4
+/usr/sbin/cassandra -p /var/tmp/cassandra-pid.lock
+echo "[cassandra-restart] Cassandra restarted with PID of $(cat /var/tmp/cassandra-pid.lock)"
