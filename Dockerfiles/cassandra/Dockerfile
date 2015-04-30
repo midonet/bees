@@ -24,7 +24,7 @@ ADD phusion-baseimage-build.tar.bz2 /
 RUN /build/system_services.sh && \
         /build/utilities.sh && \
         /build/cleanup.sh
-ADD run /etc/service/cassandra/run
+ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/cassandra-runit-script /etc/service/cassandra/run
 RUN chmod +x /etc/service/cassandra/run
 RUN mkdir /etc/service/confd-watch-cassandra
 RUN ln -s /usr/local/bin/confd-watch-cassandra /etc/service/confd-watch-cassandra/run

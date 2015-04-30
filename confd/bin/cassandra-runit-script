@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/sbin/cassandra -f -p /var/tmp/cassandra-pid.lock
