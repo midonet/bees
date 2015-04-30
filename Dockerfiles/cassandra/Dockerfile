@@ -18,6 +18,17 @@ RUN chmod +x /usr/local/bin/cassandra-restart
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/conf.d/cassandra.toml /etc/confd/conf.d/cassandra.toml
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/templates/cassandra.yaml.tmpl /etc/confd/templates/cassandra.yaml.tmpl
 
+# Make our own phusion/baseimage to add `runit`
+RUN apt-mark hold cassandra dsc
+ADD phusion-baseimage-build.tar.bz2 /
+RUN /build/system_services.sh && \
+        /build/utilities.sh && \
+        /build/cleanup.sh
+ADD run /etc/service/cassandra/run
+RUN chmod +x /etc/service/cassandra/run
+RUN mkdir /etc/service/confd-watch-cassandra
+RUN ln -s /usr/local/bin/confd-watch-cassandra /etc/service/confd-watch-cassandra/run
+
 ENV CASSANDRA_CLUSTERNAME="midonet"
 # Add default HOST_IP to localhost
 #ENV HOST_IP="localhost"
