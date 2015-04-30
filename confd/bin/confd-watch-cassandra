@@ -21,7 +21,7 @@ echo "[cassandra] confd is listening for changes on etcd..."
 
 # Start cassandra
 echo "[cassandra] starting cassandra service..."
-/usr/sbin/cassandra -p /var/tmp/cassandra-pid.lock
+sv try-restart cassandra
 
 # Tail all cassandra log files
 tail -f /var/log/cassandra/*.log
