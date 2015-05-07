@@ -19,7 +19,7 @@ ADD https://raw.githubusercontent.com/midonet/bees/master/confd/conf.d/cassandra
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/templates/cassandra.yaml.tmpl /etc/confd/templates/cassandra.yaml.tmpl
 
 # Make our own phusion/baseimage to add `runit`
-RUN apt-mark hold cassandra dsc
+RUN apt-mark hold cassandra dsc20
 ADD phusion-baseimage-build.tar.bz2 /
 RUN /build/system_services.sh && \
         /build/utilities.sh && \
