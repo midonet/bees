@@ -16,7 +16,7 @@ ExecStartPre=-/usr/bin/docker kill zookeeper-node-%H
 ExecStartPre=-/usr/bin/docker rm zookeeper-node-%H
 ExecStartPre=/usr/bin/docker pull timfallmk/bees:zookeeper
 # COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
-ExecStart=/usr/bin/docker run --name=zookeeper-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -v /var/tmp/zookeeper:/var/lib/zookeeper -p 2181:2181 -p 2888:2888 -p 3888:3888 timfallmk/bees:zookeeper
+ExecStart=/usr/bin/docker run --name=zookeeper-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 2181:2181 -p 2888:2888 -p 3888:3888 timfallmk/bees:zookeeper
 ExecStop=/usr/bin/docker stop zookeeper-node-%H
 
 [Install]
