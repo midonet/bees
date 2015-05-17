@@ -1,6 +1,8 @@
 # bees
 MidoNet for Docker Swarm, CoreOS Kubernetes, Konsole, and other cluster management tools
 
+[![Docker build](http://dockeri.co/image/timfallmk/bees)](https://registry.hub.docker.com/u/timfallmk/bees)
+
 
 ### Quick and Dirty Instructions
 ---
