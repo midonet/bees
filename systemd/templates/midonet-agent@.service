@@ -15,7 +15,7 @@ ExecStartPre=-/usr/bin/docker kill midonet-agent-node-%H
 ExecStartPre=-/usr/bin/docker rm midonet-agent-node-%H
 ExecStartPre=/usr/bin/docker pull timfallmk/bees:midonet-agent
 # COREOS_PUBLIC_IPV4 needs to be changed to COREOS_PRIVATE_IPV4 if running in a private cluster
-ExecStart=/usr/bin/docker run --name=midonet-agent-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} --cap-add NET_ADMIN --cap-add SYS_MODULE -v /lib/modules:/lib/modules timfallmk/bees:midonet-agent
+ExecStart=/usr/bin/docker run --name=midonet-agent-node-%H --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 7200:7200 --cap-add NET_ADMIN --cap-add SYS_MODULE -v /lib/modules:/lib/modules timfallmk/bees:midonet-agent
 ExecStop=/usr/bin/docker stop midonet-agent-node-%H
 
 [Install]
