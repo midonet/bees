@@ -9,8 +9,8 @@ keystore:
     - "/data/backup/dir:/data"
   links:
     - database
-    - midonet-api
-    - midonet-agent
+    - api
+    - agent
 database:
   image: timfallmk/bees:cassandra
   image: timfallmk/bees:zookeeper
@@ -24,15 +24,11 @@ database:
     - "9042:9042"
     - "9160:9160"
     - "61621:61621"
-  links:
-    - keystore
-    - midonet-api
-    - midonet-agent
-midonet-api:
+api:
   image: timfallmk/bees:midonet-api
   ports:
     - "8080:8080"
-midonet-agent:
+agent:
   image: timfallmk/bees:midonet-agent
   ports:
     - "7200:7200"
