@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Bees by midonet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Bees</h1>
+      <h2 class="project-tagline">MidoNet for Docker Swarm, CoreOS Kubernetes, Konsole, and other cluster management tools</h2>
+      <a href="https://github.com/midonet/bees" class="btn">View on GitHub</a>
+      <a href="https://github.com/midonet/bees/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/midonet/bees/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="bees" class="anchor" href="#bees" aria-hidden="true"><span class="octicon octicon-link"></span></a>bees</h1>
+
+<p>MidoNet for Docker Swarm, CoreOS Kubernetes, Konsole, and other cluster management tools</p>
+
+<p><a href="https://registry.hub.docker.com/u/timfallmk/bees"><img src="http://dockeri.co/image/timfallmk/bees" alt="Docker build"></a></p>
+
+<h3>
+<a id="quick-and-dirty-instructions" class="anchor" href="#quick-and-dirty-instructions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick and Dirty Instructions</h3>
+
+<hr>
+
+<h4>
+<a id="zookeeper" class="anchor" href="#zookeeper" aria-hidden="true"><span class="octicon octicon-link"></span></a>Zookeeper</h4>
+
+<p>There are two ways you run zookeeper in a clustered mode: with and without <code>systemd</code> and <code>fleet</code>. Currently <code>etcd</code> running <em>somewhere</em> is required at the moment. Let's go over each case here:</p>
+
+<h5>
+<a id="without-systemd" class="anchor" href="#without-systemd" aria-hidden="true"><span class="octicon octicon-link"></span></a>Without <code>systemd</code>
+</h5>
+
+<p>The cluster is designed to be run with a series of self-standing Docker containers. Each one contains a copy of <code>zookeeper</code>, as well as <code>confd</code> and some watcher scripts to look at <code>etcd</code> keys for changes.</p>
+
+<p><strong>Note</strong>: At this time, confd does not manage the <code>myid</code> file necessary for <code>zookeeper</code> because, well, because "<code>zookeeper</code>". Hopefully this will change when <code>go</code> <code>text/template</code> format unfucks itself.</p>
+
+<p>On a Docker host, we can run the following:</p>
+
+<div class="highlight highlight-shell"><pre>docker run -d --env HOST_IP=<span class="pl-smi">${COREOS_PUBLIC_IPV4}</span> -p 2181:2181 -p 2888:2888 -p 3888:3888 timfallmk/zookeeper:hacky</pre></div>
+
+<p>This is designed to run a single zookeeper container with some variables overridden.</p>
+
+<p><code>HOST_IP</code> is used to pass in the host IP address to the container so it can address itself properly. Since we're <em>not</em> running this on CoreOS, we need to fake an address to pass in instead of what would be automatically input. For right now, this also needs to be where <code>etcd</code> is running, so set it to that.</p>
+
+<p><code>-p &lt;port&gt;</code> Maps ports exposed in the container directly to corresponding ports on the host. If you want dynamic mapping (to run more than one on the same host, for example), you can use <code>-P</code> in place of all of the <code>-p</code> arguments. The zookeeper instances are <strong>also</strong> designed to work this way with minimal changes!</p>
+
+<p><code>timfallmk/zookeeper:hacky</code> This is the docker image and the repository to pull it from. The <code>hacky</code> tag here pulls a version with has the hacky <code>myid</code> workarounds mentioned above.</p>
+
+<p>The container should now go through some initial setup and will run everything necessary. Since we <em>aren't</em> using <code>fleet</code> to launch units here, we might need to initially set some keys in <code>etcd</code> for the first run configuration.</p>
+
+<p>To do this, we can use <code>etcdctl</code> to set a key in the following place, with a <code>JSON</code> payload.</p>
+
+<div class="highlight highlight-shell"><pre>etcdctl <span class="pl-c1">set</span> /service/zookeeper/<span class="pl-k">&lt;</span>what we used <span class="pl-k">for</span> <span class="pl-smi">the</span> ip earlier<span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>{"id":"1","address":"&lt;same ip&gt;","quorumport":"2888","electionport":"3888"}<span class="pl-pds">'</span></span></pre></div>
+
+<p>This should set the key for the initial run so things can be substituted properly. <em>Note</em> that you can also use <code>curl</code> to interact with <code>etcd</code> if you don't have <code>etcdctl</code> installed.</p>
+
+<p><strong>Congratulations</strong> you're now up and running with one node. You'll notice from the output that the <code>zoo.cfg</code> and <code>myid</code> files have been configured and the cluster is up and running. If you repeat the steps above with a second container (making sure to change the id and ip accordingly), you can watch as the new key in <code>etcd</code> is detected by <code>confd</code>, and it automatically updates all the necessary configs, restarting <code>zookeeper</code> afterwards.</p>
+
+<p>Boom. Done.</p>
+
+<h5>
+<a id="with-systemd" class="anchor" href="#with-systemd" aria-hidden="true"><span class="octicon octicon-link"></span></a>With <code>systemd</code>
+</h5>
+
+<p>The easiest (and most automated) way to launch and manage the cluster is with <code>systemd</code>. We'll be doing it in CoreOS, which already has all the components we need. This assumes you already have a cluster up and running.</p>
+
+<p>The steps here are very simple. We have <code>systemd</code> unit file templates which we will load into <code>fleet</code> and then just launch then. It's that easy. Let's do it.</p>
+
+<p>First clone the repo onto whatever node you'll be working on. Which node doesn't matter.</p>
+
+<div class="highlight highlight-shell"><pre>git clone https://github.com/midonet/bees.git</pre></div>
+
+<p>Now lets switch to the "hacky-version-that-works" branch (<em>sigh</em>)</p>
+
+<div class="highlight highlight-shell"><pre>git fetch <span class="pl-k">&amp;&amp;</span> git checkout hacky-version-that-works</pre></div>
+
+<p>Finally, <code>systemd</code> can bit a little finicky, so we'll need to load our templates carefully. First lets move to the <code>systemd/templates</code> directory and upload our <em>templates</em>.</p>
+
+<div class="highlight highlight-shell"><pre>fleetctl submit ./<span class="pl-k">*</span></pre></div>
+
+<p><strong>Important</strong> Make sure you <strong>don't</strong> <code>load</code> or <code>start</code> you're template files. If you do <code>systemd</code> will get very confused and you'll need to reload the daemon. CoreOS is working on this.</p>
+
+<p>Now, to make things easier, lets make some unit files that are symlinks to our templates. Go to <code>../systemd</code> and create the <code>instances</code> directory. You don't technically have to do things this way, but it makes it much easier. Once that's done, lets symlink our templates to specific unit files.</p>
+
+<div class="highlight highlight-shell"><pre>ln -s ../templates/zookeeper-discover@.service zookeeper-discovery@1.service
+ln -s ../templates/zookeeper@.service zookeeper@1.service</pre></div>
+
+<p>You can do this as many times as you like, substituting the <code>1</code> for whatever the <code>id</code> of that instance.</p>
+
+<p>Next lets load up our instances so they're ready to run.</p>
+
+<div class="highlight highlight-shell"><pre>fleetctl load ./<span class="pl-k">*</span></pre></div>
+
+<p>Now we're all ready to run. Lets launch just one this time, so we can see what happens.</p>
+
+<div class="highlight highlight-shell"><pre>fleetctl start ./zookeeper@1.service</pre></div>
+
+<p>This should start the unit on whatever host it was scheduled on. You can watch the process with <code>fleetctl journal --follow zookeeper@1.service</code>. You'll notice the same setup as without <code>systemd</code> as it's using the same container.</p>
+
+<p>Your node should now be running. If you run <code>etcdctl ls --recursive /services/zookeeper/</code> you should see an entry for the node that is now running. You can also try launching another unit and see it get scheduled somewhere else (as there is a restriction limiting one node to one host for now). You should see that a new key has been added in <code>etcd</code> and that the original node notices the change and reconfigures itself automatically. <code>fleet</code> will automatically reschedule if there are failures, and you can add or remove units in the same way as we just did.</p>
+
+<p>Congratulations, scale up or down at your leisure.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/midonet/bees">Bees</a> is maintained by <a href="https://github.com/midonet">midonet</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
