@@ -1,0 +1,41 @@
+keystore:
+  image: elcolio/etcd
+  ports:
+    - "2379:2379"
+    - "2380:2380"
+    - "4001:4001"
+    - "7001:7001"
+  volumes:
+    - "/data/backup/dir:/data"
+  links:
+    - database
+    - midonet-api
+    - midonet-agent
+database:
+  image: timfallmk/bees:cassandra
+  image: timfallmk/bees:zookeeper
+  ports:
+    - "2181:2181"
+    - "2888:2888"
+    - "3888:3888"
+    - "7000:7000"
+    - "7199:7199"
+    - "8012:8012"
+    - "9042:9042"
+    - "9160:9160"
+    - "61621:61621"
+  links:
+    - keystore
+    - midonet-api
+    - midonet-agent
+midonet-api:
+  image: timfallmk/bees:midonet-api
+  ports:
+    - "8080:8080"
+midonet-agent:
+  image: timfallmk/bees:midonet-agent
+  ports:
+    - "7200:7200"
+  cap_add:
+    - NET_ADMIN
+    - SYS_MODULE
