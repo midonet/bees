@@ -9,9 +9,9 @@ RUN sed -n '/----/,/----/p' /tmp/midonet-apt-sources.adoc | awk -F '----' '{prin
 RUN curl -L http://repo.midonet.org/packages.midokura.key | apt-key add -
 
 # Grab confd and set it up
-RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64
-RUN chmod +x ./confd-0.9.0-linux-amd64
-RUN mv ./confd-0.9.0-linux-amd64 /usr/local/bin/confd
+RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64
+RUN chmod +x ./confd-0.10.0-linux-amd64
+RUN mv ./confd-0.10.0-linux-amd64 /usr/local/bin/confd
 
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/confd-watch-midonet-agent /usr/local/bin/confd-watch-midonet-agent
 RUN chmod +x /usr/local/bin/confd-watch-midonet-agent

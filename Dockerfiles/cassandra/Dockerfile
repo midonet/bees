@@ -5,9 +5,9 @@ MAINTAINER "Tim <tim@midokura.com>"
 RUN apt-get update && apt-get install -y wget fish vim
 
 # Grab confd and set it up
-RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64
-RUN chmod +x ./confd-0.9.0-linux-amd64
-RUN mv ./confd-0.9.0-linux-amd64 /usr/local/bin/confd
+RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64
+RUN chmod +x ./confd-0.10.0-linux-amd64
+RUN mv ./confd-0.10.0-linux-amd64 /usr/local/bin/confd
 
 ADD https://raw.githubusercontent.com/midonet/bees/master/confd/bin/confd-watch-cassandra /usr/local/bin/confd-watch-cassandra
 RUN chmod +x /usr/local/bin/confd-watch-cassandra
