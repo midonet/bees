@@ -6,18 +6,21 @@ MidoNet for Docker Swarm, CoreOS Kubernetes, Konsole, and other cluster manageme
 
 ### Quick and Dirty Instructions
 ---
+
+> We'll be using Zookeeper as an example here. Other services can simply be substituted in for Zookeeper in the following steps. See the [running guide](Running.md) for details.
+
 #### Zookeeper
 There are two ways you run zookeeper in a clustered mode: with and without `systemd` and `fleet`. Currently `etcd` running *somewhere* is required at the moment. Let's go over each case here:
+
+> **Note**: For a simple way of getting `etcd` nodes up and running on each host for your containers to use, see [the running guide](Running.md/#running-etcd).
 
 ##### Without `systemd`
 The cluster is designed to be run with a series of self-standing Docker containers. Each one contains a copy of `zookeeper`, as well as `confd` and some watcher scripts to look at `etcd` keys for changes.
 
-**Note**: At this time, confd does not manage the `myid` file necessary for `zookeeper` because, well, because "`zookeeper`". Hopefully this will change when `go` `text/template` format unfucks itself.
-
 On a Docker host, we can run the following:
 
 ```shell
-docker run -d --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 2181:2181 -p 2888:2888 -p 3888:3888 timfallmk/zookeeper:hacky
+docker run -d --env HOST_IP=${COREOS_PUBLIC_IPV4} -p 2181:2181 -p 2888:2888 -p 3888:3888 timfallmk/bees:zookeeper
 ```
 
 This is designed to run a single zookeeper container with some variables overridden.
@@ -26,7 +29,7 @@ This is designed to run a single zookeeper container with some variables overrid
 
 `-p <port>` Maps ports exposed in the container directly to corresponding ports on the host. If you want dynamic mapping (to run more than one on the same host, for example), you can use `-P` in place of all of the `-p` arguments. The zookeeper instances are **also** designed to work this way with minimal changes!
 
-`timfallmk/zookeeper:hacky` This is the docker image and the repository to pull it from. The `hacky` tag here pulls a version with has the hacky `myid` workarounds mentioned above.
+`timfallmk/bees:zookeeper` This is the docker image and the repository to pull it from. The `zookeeper` tag here pulls a the container for the zookeeper service.
 
 The container should now go through some initial setup and will run everything necessary. Since we *aren't* using `fleet` to launch units here, we might need to initially set some keys in `etcd` for the first run configuration.
 
@@ -54,13 +57,7 @@ First clone the repo onto whatever node you'll be working on. Which node doesn't
 git clone https://github.com/midonet/bees.git
 ```
 
-Now lets switch to the "hacky-version-that-works" branch (*sigh*)
-
-```shell
-git fetch && git checkout hacky-version-that-works
-```
-
-Finally, `systemd` can bit a little finicky, so we'll need to load our templates carefully. First lets move to the `systemd/templates` directory and upload our *templates*.
+`systemd` can bit a little finicky, so we'll need to load our templates carefully. First lets move to the `systemd/templates` directory and upload our *templates*.
 
 ```shell
 fleetctl submit ./*
